@@ -1,16 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { createCustomElement } from '@angular/elements';
+import { MatTableModule, MatToolbarModule } from '@angular/material';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    MatToolbarModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  entryComponents: [AppComponent],
+  // bootstrap: [AppComponent] // local development
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) { }
+
+  ngDoBootstrap() {
+    const el = createCustomElement(AppComponent, { injector: this.injector });
+    customElements.define('ejs-framework', <any>el);
+  }
+}
